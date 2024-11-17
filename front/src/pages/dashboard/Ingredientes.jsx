@@ -90,7 +90,7 @@ function Ingredientes() {
               <td className="border p-2">
                 <button 
                   onClick={() => { setModalOpen(true); setCurrentIngredient(ingrediente); }} 
-                  className="bg-yellow-500 text-white px-2 py-1 rounded"
+                  className="bg-blue-500 text-white px-2 py-1 rounded"
                 >
                   Editar
                 </button>

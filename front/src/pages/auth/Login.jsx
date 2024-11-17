@@ -22,17 +22,16 @@ export function Login() {
   const enviarFormularioLogin = async e => {
     e.preventDefault();
 
-    
-      if (usuario=='deliciouscake' && password=='otorres828'){
-        localStorage.setItem("token", 'token');
-        enqueueSnackbar("Gracias por volver :D ", { variant: "success" });
-        navigate("../recetas");
-      }
-     else 
-        enqueueSnackbar("Credenciales inválidas", { variant: "error" });
-   
+    if (usuario == 'deliciouscake' && password == 'otorres828') {
+      localStorage.setItem("token", 'token');
+      enqueueSnackbar("Gracias por volver :D ", { variant: "success" });
+      navigate("../recetas");
+    }
+    else
+      enqueueSnackbar("Credenciales inválidas", { variant: "error" });
+
   };
-  
+
   return (
     <>
       <img
@@ -49,29 +48,29 @@ export function Login() {
               className="mb-4 grid h-28 place-items-center"
             >
               <Typography variant="h4" color="white" className="px-3">
-                Calculadora de Costos  
+                Calculadora de Costos
               </Typography>
               <Typography variant="h4" color="white" className="px-3">
-                  Delicious Cake
+                Delicious Cake
               </Typography>
             </CardHeader>
             <CardBody className="flex flex-col gap-4">
-              <Input type="text" label="Usuario" size="lg"  id="usuario"
-                          ref={usuarioRef}
-                          onChange={e => setUsuario(e.target.value)}
-                          value={usuario}
-                          autoComplete="off"/>
-              <Input type="password" label="Password" size="lg"  id="password"
-                          onChange={e => setPassword(e.target.value)}
-                          value={password}
-                          autoComplete="off"
-                          placeholder="***********"
-                          required/>
-              
+              <Input type="text" label="Usuario" size="lg" id="usuario"
+                ref={usuarioRef}
+                onChange={e => setUsuario(e.target.value)}
+                value={usuario}
+                autoComplete="off" />
+              <Input type="password" label="Password" size="lg" id="password"
+                onChange={e => setPassword(e.target.value)}
+                value={password}
+                autoComplete="off"
+                placeholder="***********"
+                required />
+
             </CardBody>
             <CardFooter className="pt-0">
               <Button variant="gradient" type="submit" fullWidth>
-              Iniciar Sesion
+                Iniciar Sesion
               </Button>
             </CardFooter>
           </Card>
