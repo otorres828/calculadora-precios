@@ -24,15 +24,15 @@ function Ingredientes() {
       });
   }
 
-  useEffect(()=>{
+  useEffect(() => {
     obtener_ingredientes();
-  },[])
+  }, [])
 
 
   const handleAddIngredient = (ingredient) => {
 
-    axios.post('ingredientes/crear', ingredient )
-    .then((response) => {
+    axios.post('ingredientes/crear', ingredient)
+      .then((response) => {
         if (response.data.mensaje) {
           obtener_ingredientes();
           enqueueSnackbar(response.data.mensaje, { variant: "success" });
@@ -44,8 +44,8 @@ function Ingredientes() {
   };
 
   const handleEditIngredient = (updatedIngredient) => {
-    axios.post('ingredientes/actualizar', updatedIngredient )
-    .then((response) => {
+    axios.post('ingredientes/actualizar', updatedIngredient)
+      .then((response) => {
         if (response.data.mensaje) {
           obtener_ingredientes();
           enqueueSnackbar(response.data.mensaje, { variant: "success" });
@@ -64,53 +64,56 @@ function Ingredientes() {
           </Typography>
         </CardHeader>
         <CardBody className="px-0 pt-0 pb-2">
-        <div className="p-4">
-      <button 
-        onClick={() => { setModalOpen(true); setCurrentIngredient(null); }} 
-        className="mb-4 bg-blue-500 text-white px-4 py-2 rounded"
-      >
-        Agregar Ingrediente
-      </button>
+          <div className="p-4">
+            <div className="flex justify-end">
+              <button
+                onClick={() => { setModalOpen(true); setCurrentIngredient(null); }}
+                className="mb-4 bg-blue-500 text-white px-4 py-2 rounded flex justify-end"
+              >
+                Agregar Ingrediente
+              </button>
 
-      <table className="min-w-full border">
-        <thead>
-          <tr>
-            <th className="border p-2">Nombre</th>
-            <th className="border p-2">Cantidad gr/ml</th>
-            <th className="border p-2">Precio por unidad</th>
-            <th className="border p-2">Acciones</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ingredientes && ingredientes.map((ingrediente, index) => (
-            <tr key={index}>
-              <td className="border p-2">{ingrediente.nombre}</td>
-              <td className="border p-2">{ingrediente.cantidad}</td>
-              <td className="border p-2">{ingrediente.precio}</td>
-              <td className="border p-2">
-                <button 
-                  onClick={() => { setModalOpen(true); setCurrentIngredient(ingrediente); }} 
-                  className="bg-blue-500 text-white px-2 py-1 rounded"
-                >
-                  Editar
-                </button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            </div>
 
-      {modalOpen && (
-        <AgregarIngrediente 
-          onClose={() => setModalOpen(false)} 
-          onSubmit={currentIngredient ? handleEditIngredient : handleAddIngredient} 
-          ingredient={currentIngredient} 
-        />
-      )}
-    </div>       
+            <table className="min-w-full border">
+              <thead>
+                <tr>
+                  <th className="border p-2">Nombre</th>
+                  <th className="border p-2">Cantidad gr/ml</th>
+                  <th className="border p-2">Precio por unidad</th>
+                  <th className="border p-2">Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {ingredientes && ingredientes.map((ingrediente, index) => (
+                  <tr key={index}>
+                    <td className="border p-2">{ingrediente.nombre}</td>
+                    <td className="border p-2">{ingrediente.cantidad}</td>
+                    <td className="border p-2">{ingrediente.precio}</td>
+                    <td className="border p-2">
+                      <button
+                        onClick={() => { setModalOpen(true); setCurrentIngredient(ingrediente); }}
+                        className="bg-blue-500 text-white px-2 py-1 rounded"
+                      >
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+
+            {modalOpen && (
+              <AgregarIngrediente
+                onClose={() => setModalOpen(false)}
+                onSubmit={currentIngredient ? handleEditIngredient : handleAddIngredient}
+                ingredient={currentIngredient}
+              />
+            )}
+          </div>
         </CardBody>
       </Card>
-      
+
     </div>
   );
 }
