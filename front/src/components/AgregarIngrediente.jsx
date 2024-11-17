@@ -27,7 +27,7 @@ export const AgregarIngrediente = ({ onClose, onSubmit, ingredient }) => {
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded shadow-md w-1/3">
+      <div className="bg-white p-6 rounded shadow-md sm:w-1/3">
         <h2 className="text-lg font-bold mb-4">
           {ingredient ? 'Editar Ingrediente' : 'Agregar Ingrediente'}
         </h2>
