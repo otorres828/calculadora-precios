@@ -76,7 +76,7 @@ function Ingredientes() {
         <thead>
           <tr>
             <th className="border p-2">Nombre</th>
-            <th className="border p-2">Cantidad (g)</th>
+            <th className="border p-2">Cantidad gr/ml</th>
             <th className="border p-2">Precio por unidad</th>
             <th className="border p-2">Acciones</th>
           </tr>
