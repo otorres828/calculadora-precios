@@ -82,7 +82,7 @@ function Ingredientes() {
           </tr>
         </thead>
         <tbody>
-          {ingredientes.map((ingrediente, index) => (
+          {ingredientes && ingredientes.map((ingrediente, index) => (
             <tr key={index}>
               <td className="border p-2">{ingrediente.nombre}</td>
               <td className="border p-2">{ingrediente.cantidad}</td>
