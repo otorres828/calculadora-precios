@@ -10,7 +10,7 @@ import {
 import React, { useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSnackbar } from 'notistack';
-import login from './../../images/lago.webp';
+import login from './../../images/tienda.jpg';
 
 export function Login() {
   const navigate = useNavigate();
