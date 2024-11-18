@@ -1,12 +1,24 @@
 const path = require('path');
 const nodeExternals = require('webpack-node-externals');
+const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: './api/index.js',
   output: {
-    path: path.resolve(__dirname, 'build'),
+    path: path.resolve(__dirname, 'public'),
     filename: 'index.js'
   },
   target: 'node',
-  externals: [nodeExternals()]
+  externals: [nodeExternals()],
+  
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'api/json/*.json',
+          to: 'json/[name][ext]'
+        }
+      ]
+    })
+  ]
 };

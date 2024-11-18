@@ -2,30 +2,27 @@
 
 const fs = require('fs').promises;
 const path = require('path');
+const Ingrediente = require('../models/Ingrediente');
+const { Op } = require('sequelize');
 
 // Lista un ingrediente
-const listar = async (req, reply) => {
+const listar = async (req, res) => {
     try {
-        // Obtener el path del archivo JSON
-        const filePath = path.join(__dirname, '..', 'json', 'ingredientes.json');
+
+        const ingredientes = await Ingrediente.findAll();
+        return res.send(ingredientes);
         
-        // Leer el contenido del archivo
-        const data = await fs.readFile(filePath, 'utf8');
-        
-        // Parsear el JSON y enviar la respuesta
-        const ingredients = JSON.parse(data);
-        reply.send(ingredients);
     } catch (error) {
         console.error('Error al leer el archivo:', error);
-        reply.code(500).send({ message: 'Error interno del servidor' });
+        return res.status(500).send({ message: 'Error interno del servidor' });
     }
 };
 
 //Crea un ingredieinte
 
-const crear = async (req, reply) => {
+const crear = async (req, res) => {
     const { nombre, cantidad, precio } = req.body;
-    const filePath = path.join(__dirname, '..', 'json', 'ingredientes.json');
+    const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
     const data = await fs.readFile(filePath, 'utf8');
     const ingredients = JSON.parse(data);
 
@@ -44,11 +41,11 @@ const crear = async (req, reply) => {
     try {
         
         await fs.writeFile(filePath, JSON.stringify(ingredients, null, 2));
-        return reply.send({ mensaje: 'Ingrediente creado exitosamente', id });
+        return res.send({ mensaje: 'Ingrediente creado exitosamente', id });
 
     } catch (error) {
         console.error('Error al crear el ingrediente:', error);
-        return reply.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+        return res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
     }
 };
 
@@ -58,14 +55,14 @@ const actualizar = async (req, reply) => {
 
     const { id, nombre, cantidad, precio } = req.body;
 
-    const filePath = path.join(__dirname, '..', 'json', 'ingredientes.json');
+    const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
     const data = await fs.readFile(filePath, 'utf8');
     const ingredients = JSON.parse(data);
 
    const index = ingredients.findIndex(item => item.id === id);
 
     if (index === -1) {
-        return reply.status(404).send({ error: 'Ingrediente no encontrado' });
+        return res.status(404).send({ error: 'Ingrediente no encontrado' });
     }
 
     const ingredienteActualizado = {
@@ -79,10 +76,10 @@ const actualizar = async (req, reply) => {
     
     try {
         await fs.writeFile(filePath, JSON.stringify(ingredients, null, 2));
-        return reply.send({ mensaje: 'Ingrediente actualizado exitosamente', id });
+        return res.send({ mensaje: 'Ingrediente actualizado exitosamente', id });
     } catch (error) {
         console.error('Error al escribir el archivo de ingredientes:', error);
-        return reply.status(500).send({ error: 'Ha ocurrido un error al actualizar el ingrediente' });
+        return res.status(500).send({ error: 'Ha ocurrido un error al actualizar el ingrediente' });
     }
 };
 
@@ -91,17 +88,17 @@ const eliminar = async (req, reply) => {
     const { clave } = req.body;
 
     if(clave==26269828){
-        const filePath = path.join(__dirname, '..', 'json', 'ingredientes.json');
+        const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
     
         try {
             await fs.writeFile(filePath, JSON.stringify([{}], null, 2));
-            return reply.send({ mensaje: 'Ingredientes eliminados exitosamente' });
+            return res.send({ mensaje: 'Ingredientes eliminados exitosamente' });
         } catch (error) {
             console.error('Error al escribir el archivo de ingredientes:', error);
-            return reply.status(500).send({ error: 'Ha ocurrido un error al eliminar los ingredientes' });
+            return res.status(500).send({ error: 'Ha ocurrido un error al eliminar los ingredientes' });
         }
     }else{
-        return reply.status(500).send({ error: 'falta clave' });
+        return res.status(500).send({ error: 'falta clave' });
     }
 
 };
@@ -120,7 +117,7 @@ function barajar(array) {
   }
   
   function generarAleatorios(cantidad) {
-    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split("");
+    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
     barajar(caracteres);
     return caracteres.slice(0,cantidad).join("")
   }
