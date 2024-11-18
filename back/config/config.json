@@ -2,15 +2,15 @@
   "development": {
     "username": "root",
     "password": null,
-    "database": "deliciouscake",
-    "host": "./config/deliciouscake.sqlite",
+    "database": "costos",
+    "host": "./config/costos.sqlite",
     "dialect": "sqlite"
   },
   "production": {
     "username": "root",
     "password": null,
-    "database": "deliciouscake",
-    "host": "./config/deliciouscake.sqlite",
+    "database": "costos",
+    "host": "./config/costos.sqlite",
     "dialect": "sqlite"
   }
 }

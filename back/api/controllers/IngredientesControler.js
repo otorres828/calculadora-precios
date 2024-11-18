@@ -1,17 +1,12 @@
 
-
-const fs = require('fs').promises;
-const path = require('path');
 const Ingrediente = require('../models/Ingrediente');
-const { Op } = require('sequelize');
-
 // Lista un ingrediente
 const listar = async (req, res) => {
     try {
 
         const ingredientes = await Ingrediente.findAll();
         return res.send(ingredientes);
-        
+
     } catch (error) {
         console.error('Error al leer el archivo:', error);
         return res.status(500).send({ message: 'Error interno del servidor' });
@@ -19,108 +14,94 @@ const listar = async (req, res) => {
 };
 
 //Crea un ingredieinte
-
 const crear = async (req, res) => {
     const { nombre, cantidad, precio } = req.body;
-    const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
-    const data = await fs.readFile(filePath, 'utf8');
-    const ingredients = JSON.parse(data);
 
-    // Genera un ID alfanumérico único
-    let id = generarAleatorios(10)
-    
-    const nuevoIngrediente = {
-        id,
-        nombre,
-        cantidad,
-        precio
-    };
 
-    ingredients.push(nuevoIngrediente)
+    // Validación básica
+    if (!nombre || !cantidad || !precio) {
+        return res.status(400).send({ error: 'Faltan campos obligatorios' });
+    }
 
     try {
-        
-        await fs.writeFile(filePath, JSON.stringify(ingredients, null, 2));
-        return res.send({ mensaje: 'Ingrediente creado exitosamente', id });
 
+        // Crea un nuevo objeto de Ingrediente
+        const nuevoIngrediente = await Ingrediente.create({
+            nombre,
+            cantidad,
+            precio
+        });
+
+        return res.status(201).json(nuevoIngrediente); // Devuelve el ingrediente creado
     } catch (error) {
         console.error('Error al crear el ingrediente:', error);
-        return res.status(500).send({ error: 'Ha ocurrido un error inesperado' });
+        return res.status(500).send({ error: 'Error al crear el ingrediente' });
     }
 };
 
 //Actualiza un ingrediente
-
-const actualizar = async (req, reply) => {
-
+const actualizar = async (req, res) => {
     const { id, nombre, cantidad, precio } = req.body;
 
-    const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
-    const data = await fs.readFile(filePath, 'utf8');
-    const ingredients = JSON.parse(data);
-
-   const index = ingredients.findIndex(item => item.id === id);
-
-    if (index === -1) {
-        return res.status(404).send({ error: 'Ingrediente no encontrado' });
+    // Validación básica del ID
+    if (!id) {
+        return res.status(400).send({ error: 'El ID del ingrediente es obligatorio' });
     }
 
-    const ingredienteActualizado = {
-        ...ingredients[index],
-        nombre: nombre || ingredients[index].nombre,
-        cantidad: cantidad || ingredients[index].cantidad,
-        precio: precio || ingredients[index].precio
-    };
-
-    ingredients[index] = ingredienteActualizado;
-    
     try {
-        await fs.writeFile(filePath, JSON.stringify(ingredients, null, 2));
-        return res.send({ mensaje: 'Ingrediente actualizado exitosamente', id });
-    } catch (error) {
-        console.error('Error al escribir el archivo de ingredientes:', error);
-        return res.status(500).send({ error: 'Ha ocurrido un error al actualizar el ingrediente' });
-    }
-};
+        // Busca el ingrediente por ID
+        const ingrediente = await Ingrediente.findByPk(id);
 
-const eliminar = async (req, reply) => {
-
-    const { clave } = req.body;
-
-    if(clave==26269828){
-        const filePath = path.join(__dirname, '..', '../public/json', 'ingredientes.json');
-    
-        try {
-            await fs.writeFile(filePath, JSON.stringify([{}], null, 2));
-            return res.send({ mensaje: 'Ingredientes eliminados exitosamente' });
-        } catch (error) {
-            console.error('Error al escribir el archivo de ingredientes:', error);
-            return res.status(500).send({ error: 'Ha ocurrido un error al eliminar los ingredientes' });
+        if (!ingrediente) {
+            return res.status(404).send({ error: 'Ingrediente no encontrado' });
         }
-    }else{
-        return res.status(500).send({ error: 'falta clave' });
-    }
 
+        // Actualiza los campos del ingrediente si se proporcionaron
+        ingrediente.nombre = nombre || ingrediente.nombre;
+        ingrediente.cantidad = cantidad || ingrediente.cantidad;
+        ingrediente.precio = precio || ingrediente.precio;
+
+        // Guarda los cambios en la base de datos
+        await ingrediente.save();
+
+        return res.status(200).json(ingrediente);
+
+    } catch (error) {
+        console.error('Error al actualizar el ingrediente:', error);
+        return res.status(500).send({ error: 'Error al actualizar el ingrediente' });
+    }
 };
 
-function barajar(array) {
-    let posicionActual = array.length;
-  
-    while (0 !== posicionActual) {
-      const posicionAleatoria = Math.floor(Math.random() * posicionActual);
-      posicionActual--;
-      //"truco" para intercambiar los valores sin necesidad de una variable auxiliar
-      [array[posicionActual], array[posicionAleatoria]] = [
-        array[posicionAleatoria], array[posicionActual]];
+//Eliminar todos los ingredientes
+const eliminar = async (req, res) => {
+    try {
+        // Elimina todos los registros de la tabla Ingrediente
+        await Ingrediente.destroy({
+            where: {}, // Condición vacía para eliminar todos
+            truncate: true // Opcional: Trunca la tabla para un mejor rendimiento
+        });
+
+        return res.status(200).json({ message: 'Ingredientes eliminados exitosamente' });
+    } catch (error) {
+        console.error('Error al eliminar los ingredientes:', error);
+        return res.status(500).send({ error: 'Error al eliminar los ingredientes' });
     }
-    return array;
-  }
-  
-  function generarAleatorios(cantidad) {
-    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".split("");
-    barajar(caracteres);
-    return caracteres.slice(0,cantidad).join("")
-  }
+};
+
+function creartabla() {
+    Ingrediente.sync({ force: true })
+        .then(() => {
+            console.log('Ingrediente table created successfully');
+            // Continue with your API route logic
+        })
+        .catch((error) => {
+            console.error('Error creating Ingrediente table:', error);
+        });
+}
 
 
-module.exports = { listar,crear,actualizar,eliminar };
+creartabla()
+
+
+
+module.exports = { listar, crear, actualizar, eliminar };

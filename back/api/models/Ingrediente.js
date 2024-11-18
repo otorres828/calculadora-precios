@@ -10,16 +10,12 @@ const Ingrediente = sequelize.define('Ingrediente', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  descripcion: {
-    type: DataTypes.STRING,
-    allowNull: false
-  },
   cantidad: {
     type: DataTypes.INTEGER,
     allowNull: false
   },
   precio: {
-    type: DataTypes.FLOAT,
+    type: DataTypes.STRING,
     allowNull: false
   },
 },{

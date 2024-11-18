@@ -1,5 +1,5 @@
-# SISTEMA DE CONTROL DE ACCESO A BIBLIOTECA 📚
-  _aplicacion web, basada en un sistema de control de acceso a Biblioteca de la UCAB-Gy_
+# SISTEMA DE CONTROL DE ACCESO A costos 📚
+  _aplicacion web, basada en un sistema de control de acceso a costos de la UCAB-Gy_
 ## Construido con 🛠️
   **Backend**
 * [Node Js v16](https://nodejs.org/es/blog/release/v16.16.0)
@@ -22,7 +22,7 @@ _Que cosas necesitas para instalar el software y como instalarlas (backend)_
 ### Preparacion del a Base de Datos (mysql)  🔧
 1. Si no lo tienes, clona el repositorio en la raiz.
 2. Accede a la carpeta back/config
-3. Toma el archivo **biblioteca.sql** e importalo en tu gestor de base de datos
+3. Toma el archivo **costos.sql** e importalo en tu gestor de base de datos
 ### Instalación de la API (back) 🔧
 
 
@@ -36,7 +36,7 @@ URL_API="http://127.0.0.1:5050"
 
 DB_USERNAME="root"
 DB_PASSWORD=""
-DB_DATABASE="biblioteca"
+DB_DATABASE="costos"
 DB_HOST="localhost"
 DB_DIALECT="mysql"
 DB_TIMEZONE='America/Caracas'

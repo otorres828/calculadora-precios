@@ -1,5 +1,5 @@
-# SISTEMA DE CONTROL DE ACCESO A BIBLIOTECA 📚
-  _aplicacion web, basada en un sistema de control de acceso a Biblioteca de la UCAB-Gy_
+# SISTEMA DE CONTROL DE ACCESO A costos 📚
+  _aplicacion web, basada en un sistema de control de acceso a costos de la UCAB-Gy_
 ## Construido con 🛠️
   **Front end - React Js**
 * Node Js v16
