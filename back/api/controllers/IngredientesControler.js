@@ -1,5 +1,6 @@
 
 const Ingrediente = require('../models/Ingrediente');
+
 // Lista un ingrediente
 const listar = async (req, res) => {
     try {
