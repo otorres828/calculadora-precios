@@ -1,12 +1,16 @@
 
+const db = require('../../config/db');
 const Ingrediente = require('../models/Ingrediente');
 
 // Lista un ingrediente
 const listar = async (req, res) => {
     try {
 
-        const ingredientes = await Ingrediente.findAll();
-        return res.send(ingredientes);
+        const result = await db.query('SELECT * FROM ingredientes');
+        res.json(result.rows);
+
+        // const ingredientes = await Ingrediente.findAll();
+        // return res.send(ingredientes);
 
     } catch (error) {
         console.error('Error al leer el archivo:', error);
@@ -89,19 +93,6 @@ const eliminar = async (req, res) => {
     }
 };
 
-function creartabla() {
-    Ingrediente.sync({ force: true })
-        .then(() => {
-            console.log('Ingrediente table created successfully');
-            // Continue with your API route logic
-        })
-        .catch((error) => {
-            console.error('Error creating Ingrediente table:', error);
-        });
-}
-
-
-creartabla()
 
 
 
