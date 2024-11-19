@@ -34,7 +34,7 @@ const crear = async (req, res) => {
         const nuevoIngrediente = result.rows[0];
 
         // return res.status(201).json(nuevoIngrediente); // Devuelve el ingrediente creado
-        return res.status(200).json({ message: 'Ingredientes creado exitosamente' });
+        return res.status(200).json({ message: 'Ingredientes creado exitosamente',ingrediente:nuevoIngrediente });
 
 
     } catch (error) {
@@ -82,7 +82,7 @@ const actualizar = async (req, res) => {
         ingrediente = updateResult.rows[0];
 
         // return res.status(200).json(ingrediente);
-        return res.status(200).json({ message: 'Ingredientes actualizado exitosamente' });
+        return res.status(200).json({ message: 'Ingredientes actualizado exitosamente',ingrediente:ingrediente });
 
     } catch (error) {
         console.error('Error al actualizar el ingrediente:', error);
