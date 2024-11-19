@@ -43,7 +43,7 @@ export const AgregarIngrediente = ({ onClose, onSubmit, ingredient }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Cantidad (g)</label>
+            <label className="block text-sm font-medium mb-1">Cantidad (gr/ml)</label>
             <input
               type="number"
               value={cantidad}
@@ -53,7 +53,7 @@ export const AgregarIngrediente = ({ onClose, onSubmit, ingredient }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-sm font-medium mb-1">Precio por unidad</label>
+            <label className="block text-sm font-medium mb-1">Precio por unidad (eur)</label>
             <input
               type="number"
               value={precio}

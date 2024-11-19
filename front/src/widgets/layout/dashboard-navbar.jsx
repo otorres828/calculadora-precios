@@ -83,17 +83,7 @@ export function DashboardNavbar() {
          
         </div>
         <div className="flex items-center">
-            <Tooltip title="Acceso Manual"  placement="bottom">
-
-              <IconButton
-                variant="text"
-                color="blue-gray"
-                onClick={() => setOpenConfigurator(dispatch, true)}
-              >
-                <Cog6ToothIcon className="h-5 w-5 text-blue-gray-500" />
-
-              </IconButton>
-            </Tooltip>
+            
 
             <Menu>
               <MenuHandler>
