@@ -1,6 +1,5 @@
 
 const db = require('../../config/db');
-const Ingrediente = require('../models/Ingrediente');
 
 // Lista un ingrediente
 const listar = async (req, res) => {
@@ -34,7 +33,10 @@ const crear = async (req, res) => {
         // Obtiene el objeto creado del resultado de la consulta
         const nuevoIngrediente = result.rows[0];
 
-        return res.status(201).json(nuevoIngrediente); // Devuelve el ingrediente creado
+        // return res.status(201).json(nuevoIngrediente); // Devuelve el ingrediente creado
+        return res.status(200).json({ message: 'Ingredientes creado exitosamente' });
+
+
     } catch (error) {
         console.error('Error al crear el ingrediente:', error);
         return res.status(500).send({ error: 'Error al crear el ingrediente' });
@@ -79,7 +81,8 @@ const actualizar = async (req, res) => {
         // Obtiene el objeto actualizado del resultado de la consulta
         ingrediente = updateResult.rows[0];
 
-        return res.status(200).json(ingrediente);
+        // return res.status(200).json(ingrediente);
+        return res.status(200).json({ message: 'Ingredientes actualizado exitosamente' });
 
     } catch (error) {
         console.error('Error al actualizar el ingrediente:', error);
