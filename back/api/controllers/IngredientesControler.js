@@ -6,11 +6,11 @@ const Ingrediente = require('../models/Ingrediente');
 const listar = async (req, res) => {
     try {
 
-        const result = await db.query('SELECT * FROM ingredientes');
-        res.json(result.rows);
+        // const result = await db.query('SELECT * FROM ingredientes');
+        // res.json(result.rows);
 
-        // const ingredientes = await Ingrediente.findAll();
-        // return res.send(ingredientes);
+        const ingredientes = await Ingrediente.findAll();
+        return res.send(ingredientes);
 
     } catch (error) {
         console.error('Error al leer el archivo:', error);
