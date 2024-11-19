@@ -33,9 +33,9 @@ function Ingredientes() {
 
     axios.post('/ingredientes/crear', ingredient)
       .then((response) => {
-        if (response.data.mensaje) {
+        if (response.data.message) {
           obtener_ingredientes();
-          enqueueSnackbar(response.data.mensaje, { variant: "success" });
+          enqueueSnackbar(response.data.message, { variant: "success" });
         } else {
           enqueueSnackbar(response.data.error, { variant: "warning" });
         }
@@ -46,9 +46,9 @@ function Ingredientes() {
   const handleEditIngredient = (updatedIngredient) => {
     axios.post('/ingredientes/actualizar', updatedIngredient)
       .then((response) => {
-        if (response.data.mensaje) {
+        if (response.data.message) {
           obtener_ingredientes();
-          enqueueSnackbar(response.data.mensaje, { variant: "success" });
+          enqueueSnackbar(response.data.message, { variant: "success" });
         } else {
           enqueueSnackbar(response.data.error, { variant: "warning" });
         }
