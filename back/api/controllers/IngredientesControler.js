@@ -6,11 +6,8 @@ const Ingrediente = require('../models/Ingrediente');
 const listar = async (req, res) => {
     try {
 
-        // const result = await db.query('SELECT * FROM ingredientes');
-        // res.json(result.rows);
-
-        const ingredientes = await Ingrediente.findAll();
-        return res.send(ingredientes);
+        const result = await db.query('SELECT * FROM ingredientes');
+        res.json(result.rows);
 
     } catch (error) {
         console.error('Error al leer el archivo:', error);
@@ -22,20 +19,20 @@ const listar = async (req, res) => {
 const crear = async (req, res) => {
     const { nombre, cantidad, precio } = req.body;
 
-
     // Validación básica
     if (!nombre || !cantidad || !precio) {
         return res.status(400).send({ error: 'Faltan campos obligatorios' });
     }
 
     try {
+        // Ejecuta una consulta SQL para crear el nuevo ingrediente
+        const result = await db.query(
+            'INSERT INTO ingredientes (nombre, cantidad, precio) VALUES ($1, $2, $3) RETURNING *',
+            [nombre, cantidad, precio]
+        );
 
-        // Crea un nuevo objeto de Ingrediente
-        const nuevoIngrediente = await Ingrediente.create({
-            nombre,
-            cantidad,
-            precio
-        });
+        // Obtiene el objeto creado del resultado de la consulta
+        const nuevoIngrediente = result.rows[0];
 
         return res.status(201).json(nuevoIngrediente); // Devuelve el ingrediente creado
     } catch (error) {
@@ -54,20 +51,33 @@ const actualizar = async (req, res) => {
     }
 
     try {
-        // Busca el ingrediente por ID
-        const ingrediente = await Ingrediente.findByPk(id);
+        // Ejecuta una consulta SQL para buscar el ingrediente por ID
+        const result = await db.query(
+            'SELECT * FROM ingredientes WHERE id = $1 LIMIT 1',
+            [id]
+        );
 
-        if (!ingrediente) {
+        let ingrediente;
+
+        if (result.rows.length === 0) {
             return res.status(404).send({ error: 'Ingrediente no encontrado' });
+        } else {
+            ingrediente = result.rows[0];
         }
 
         // Actualiza los campos del ingrediente si se proporcionaron
-        ingrediente.nombre = nombre || ingrediente.nombre;
-        ingrediente.cantidad = cantidad || ingrediente.cantidad;
-        ingrediente.precio = precio || ingrediente.precio;
+        if (nombre !== undefined) ingrediente.nombre = nombre;
+        if (cantidad !== undefined) ingrediente.cantidad = cantidad;
+        if (precio !== undefined) ingrediente.precio = precio;
 
-        // Guarda los cambios en la base de datos
-        await ingrediente.save();
+        // Ejecuta una consulta SQL para actualizar los cambios
+        const updateResult = await db.query(
+            'UPDATE ingredientes SET nombre = $1, cantidad = $2, precio = $3 WHERE id = $4 RETURNING *',
+            [ingrediente.nombre, ingrediente.cantidad, ingrediente.precio, id]
+        );
+
+        // Obtiene el objeto actualizado del resultado de la consulta
+        ingrediente = updateResult.rows[0];
 
         return res.status(200).json(ingrediente);
 
@@ -80,11 +90,10 @@ const actualizar = async (req, res) => {
 //Eliminar todos los ingredientes
 const eliminar = async (req, res) => {
     try {
-        // Elimina todos los registros de la tabla Ingrediente
-        await Ingrediente.destroy({
-            where: {}, // Condición vacía para eliminar todos
-            truncate: true // Opcional: Trunca la tabla para un mejor rendimiento
-        });
+        // Ejecuta una consulta SQL para eliminar todos los registros de la tabla ingredientes
+        await db.query(
+            'TRUNCATE TABLE ingredientes'
+        );
 
         return res.status(200).json({ message: 'Ingredientes eliminados exitosamente' });
     } catch (error) {
