@@ -1,11 +1,11 @@
 const { Pool } = require('pg');
 
 const pool = new Pool({
-  user: 'postgres',
-  password: 'qQiPDsekcCMcTTVM',
-  host: 'db.lamlaonpeyttjmfjzcsd.supabase.co',
-  port: 6543, // default Postgres port
-  database: 'postgres',
+  user:     process.env.deliciouscake_USER,
+  password: process.env.deliciouscake_PASSWORD,
+  host:     process.env.deliciouscake_HOST,
+  port:     6543, // default Postgres port
+  database: process.env.deliciouscake_DATABASE,
 });
 
 module.exports = {
