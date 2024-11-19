@@ -18,7 +18,7 @@ function Ingredientes() {
 
   function obtener_ingredientes() {
     axios
-      .get("/api/ingredientes")
+      .get("/ingredientes")
       .then((response) => {
         setIngredientes(response.data)
       });
@@ -31,7 +31,7 @@ function Ingredientes() {
 
   const handleAddIngredient = (ingredient) => {
 
-    axios.post('/api/ingredientes/crear', ingredient)
+    axios.post('/ingredientes/crear', ingredient)
       .then((response) => {
         if (response.data.mensaje) {
           obtener_ingredientes();
@@ -44,7 +44,7 @@ function Ingredientes() {
   };
 
   const handleEditIngredient = (updatedIngredient) => {
-    axios.post('api/ingredientes/actualizar', updatedIngredient)
+    axios.post('/ingredientes/actualizar', updatedIngredient)
       .then((response) => {
         if (response.data.mensaje) {
           obtener_ingredientes();
