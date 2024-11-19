@@ -4,7 +4,7 @@ const pool = new Pool({
   user:     process.env.deliciouscake_USER,
   password: process.env.deliciouscake_PASSWORD,
   host:     process.env.deliciouscake_HOST,
-  port:     6543, // default Postgres port
+  port:     5432, // default Postgres port
   database: process.env.deliciouscake_DATABASE,
 });
 
