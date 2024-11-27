@@ -7,10 +7,10 @@ const listar = async (req, res) => {
     try {
 
         if(isDevelopment){
-            const [rows] = await db.query('SELECT * FROM ingredientes');
+            const [rows] = await db.query('SELECT * FROM ingredientes order by id asc');
             return res.json(rows);
         }else{
-            const result = await db.query('SELECT * FROM ingredientes');
+            const result = await db.query('SELECT * FROM ingredientes order by id asc');
             return res.json(result.rows);
         }
     } catch (error) {
