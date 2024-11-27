@@ -7,7 +7,19 @@ const listar = async (req, res) => {
 
         if (isDevelopment) {
             const [rows] = await db.query('SELECT * FROM recetas');
-            return res.json(rows);
+
+            let news = [];
+            for (let i = 0; i < rows.length; i++) {
+                let receta = rows[i];
+                const [ingredientes] = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= ? and r.ingrediente_id=i.id',[receta.id]);
+
+                let ojb={
+                    "receta":receta,
+                    "ingredientes":ingredientes
+                }
+                news.push(ojb)
+            }
+                return res.json(news);
         } else {
             const result = await db.query('SELECT * FROM recetas');
             return res.json(result.rows);
