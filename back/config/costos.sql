@@ -16,7 +16,7 @@ CREATE TABLE ingredientes (
 CREATE TABLE recetas (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
-    descripcion TEXT
+    descripcion TEXT,
     precio FLOAT
 );
 
