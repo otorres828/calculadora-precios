@@ -70,7 +70,7 @@ const crear = async (req, res) => {
                 let item = ingredientes[i];
                 await db.query(
                     'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES (?, ?, ?)',
-                    [insertId, item.id, item.cantidad]
+                    [insertId, item.id, item.cant_usada]
                 );
             }
 

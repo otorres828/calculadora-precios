@@ -23,7 +23,7 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
       setDescripcion(receta.receta.descripcion);
       setPrecio(receta.receta.precio);
       setIngredientesSeleccionados(receta.ingredientes);
-      setIngredientesDisponibles(ingrd.filter(i => !receta.ingredientes.some(s => s.id === i.id)));
+      setIngredientesDisponibles(ingrd.filter(i => !receta.ingredientes.some(s => s.id == i.id)));
 
       let cs=0;
       for (let i = 0; i < receta.ingredientes.length; i++) {
@@ -31,6 +31,12 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
          cs += ingredi.cant_usada * ingredi.precio / ingredi.cantidad
       }
       setCosto(cs);
+    }else{
+      setNombre("");
+      setDescripcion("");
+      setPrecio(0);
+      setIngredientesSeleccionados([]);
+      setIngredientesDisponibles(ingrd)
     }
   }, [receta, ingrd]);
 
@@ -158,8 +164,8 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
 
 
               <div className="p-2 mt-3">
-                <table class="w-full text-sm text-left rtl:text-right">
-                  <thead class="uppercase bg-gray-50 ">
+                <table className="w-full text-sm text-left rtl:text-right">
+                  <thead className="uppercase bg-gray-50 ">
                     <tr>
                       <th>Ingrediente</th>
                       <th>Cantidad</th>

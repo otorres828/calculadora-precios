@@ -37,7 +37,15 @@ function Recetas() {
 
   const handleAddReceta = (ingredient) => {
 
-    axios.post('/recetas/crear', ingredient)
+      let objeto =     {
+        "id"        : ingredient.id,
+        "nombre"    : ingredient.nombre,
+        "descripcion": ingredient.descripcion,
+        "precio": ingredient.precio,
+        "ingredientes": ingredient.ingredientes
+    }
+      
+    axios.post('/recetas/crear', objeto)
       .then((response) => {
         if (response.data.message) {
           obtener_recetas();
