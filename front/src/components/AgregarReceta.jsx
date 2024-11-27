@@ -101,7 +101,7 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
             <label className="block text-sm font-medium mb-1"><b>Descripcion</b></label>
             <textarea
               value={descripcion}
-              onChange={(e) => setDescripcion(Number(e.target.value))}
+              onChange={(e) => setDescripcion(e.target.value)}
               className="border border-gray-300 rounded w-full p-2"
               required
             ></textarea>
