@@ -113,9 +113,9 @@ function Recetas() {
                 {recetas && recetas.map((receta, index) => (
                   <tr key={index}>
                     <td className="border p-2">{receta.receta.nombre}</td>
-                    <td className="border p-2">{obtenerCostoReceta(receta.ingredientes)}</td>
+                    <td className="border p-2">{obtenerCostoReceta(receta.ingredientes).toFixed(2)}</td>
                     <td className="border p-2">{receta.receta.precio}</td>
-                    <td className="border p-2">{receta.receta.precio - obtenerCostoReceta(receta.ingredientes)}</td>
+                    <td className="border p-2">{(receta.receta.precio - obtenerCostoReceta(receta.ingredientes).toFixed(2))}</td>
                     <td className="border p-2">
                       <button
                         onClick={() => { setModalOpen(true); setcurrentReceta(receta); }}

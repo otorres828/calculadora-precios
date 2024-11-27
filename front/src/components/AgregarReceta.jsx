@@ -172,7 +172,7 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
                       <tr key={ingrediente.id}>
                         <td>{ingrediente.nombre}</td>
                         <td>{ingrediente.cant_usada}</td>
-                        <td>{ingrediente.cant_usada *  ingrediente.precio / ingrediente.cantidad}</td>
+                        <td>{(ingrediente.cant_usada *  ingrediente.precio / ingrediente.cantidad).toFixed(2)}</td>
                         <td>
                           <button onClick={() => handleIngredientRemove(index)}>X</button>
                         </td>
@@ -188,8 +188,8 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
           </div>
 
           <div className="flex flex-col">
-              <label htmlFor="" className="text-sm font-normal">Costo: <b>{costo} EUR </b></label>
-              <label htmlFor="" className="text-sm font-normal">Ganancia: <b>{precio - costo} EUR</b></label>
+              <label htmlFor="" className="text-sm font-normal">Costo: <b>{costo.toFixed(2)} EUR </b></label>
+              <label htmlFor="" className="text-sm font-normal">Ganancia: <b>{(precio - costo).toFixed(2)} EUR</b></label>
             </div>
 
 
