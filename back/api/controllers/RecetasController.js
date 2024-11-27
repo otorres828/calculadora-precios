@@ -61,19 +61,13 @@ const crear = async (req, res) => {
             );
             const nuevaReceta = result.rows[0];
 
-
-            const ingredienteIds = ingredientes.map(ingrediente => ingrediente.id);
-            const cantidades = ingredientes.map(ingrediente => ingrediente.cantidad); // Extrae las cantidades de los ingredientes
-
-            const insertIngredientesQuery = `
-                INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad)
-                VALUES ${ingredienteIds.map((_, index) => `(DEFAULT, $${index + 1}, $${index + 1 + ingredienteIds.length})`).join(', ')}
-                RETURNING *;
-            `;
-
-            const values = [...ingredienteIds, ...cantidades];
-            await db.query(insertIngredientesQuery, values);
-
+            for (let i = 0; i < ingredientes.length; i++) {
+                let item = ingredientes[i];
+                await db.query(
+                    'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES ($1, $2, $3)',
+                    [nuevaReceta.id, item.id, item.cantidad]
+                );
+            }
             return res.status(201).json({ message: 'Receta creada exitosamente', receta: nuevaReceta });
         }
 
