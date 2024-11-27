@@ -22,7 +22,7 @@ export function Login() {
   const enviarFormularioLogin = async e => {
     e.preventDefault();
 
-    if (usuario == 'deliciouscake' && password == 'otorres828') {
+    if (usuario.toLowerCase()  == 'deliciouscake' && password.toLowerCase()  == 'oliver') {
       localStorage.setItem("token", 'token');
       enqueueSnackbar("Gracias por volver :D ", { variant: "success" });
       navigate("../recetas");
