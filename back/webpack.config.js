@@ -12,13 +12,6 @@ module.exports = {
   externals: [nodeExternals()],
   
   plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'api/json/*.json',
-          to: 'json/[name][ext]'
-        }
-      ]
-    })
+    new CopyPlugin()
   ]
 };
