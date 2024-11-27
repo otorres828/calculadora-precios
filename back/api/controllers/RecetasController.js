@@ -90,7 +90,7 @@ const crear = async (req, res) => {
                 let item = ingredientes[i];
                 await db.query(
                     'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES ($1, $2, $3)',
-                    [nuevaReceta.id, item.id, item.cantidad]
+                    [nuevaReceta.id, item.id, item.cant_usada]
                 );
             }
             return res.status(201).json({ message: 'Receta creada exitosamente', receta: nuevaReceta });

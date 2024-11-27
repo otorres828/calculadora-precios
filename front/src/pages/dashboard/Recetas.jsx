@@ -112,7 +112,7 @@ function Recetas() {
                   <tr>
                     <th className="border p-2">Nombre</th>
                     <th className="border p-2">Costo de produccion (eur)</th>
-                    <th className="border p-2">Costo de Venta (eur)</th>
+                    <th className="border p-2">Precio de Venta (eur)</th>
                     <th className="border p-2">Ganancia</th>
                     <th className="border p-2">Acciones</th>
                   </tr>
