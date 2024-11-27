@@ -19,10 +19,23 @@ const listar = async (req, res) => {
                 }
                 news.push(ojb)
             }
-                return res.json(news);
+            return res.json(news);
         } else {
             const result = await db.query('SELECT * FROM recetas');
-            return res.json(result.rows);
+            let recetas = result.rows
+
+            let news = [];
+            for (let i = 0; i < recetas.length; i++) {
+                let receta = recetas[i];
+                const ingredientes = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= $1 and r.ingrediente_id=i.id',[receta.id]);
+
+                let ojb={
+                    "receta":receta,
+                    "ingredientes":ingredientes.rows
+                }
+                news.push(ojb)
+            }
+            return res.json(news);
         }
 
     } catch (error) {
