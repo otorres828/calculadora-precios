@@ -46,8 +46,6 @@ function Ingredientes() {
   const handleEditIngredient = (updatedIngredient) => {
     axios.post('/ingredientes/actualizar', updatedIngredient)
       .then((response) => {
-        console.log(response)
-        console.log(response.data)
         if (response.data.message) {
           obtener_ingredientes();
           enqueueSnackbar(response.data.message, { variant: "success" });

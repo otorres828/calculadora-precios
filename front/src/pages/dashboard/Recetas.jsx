@@ -5,16 +5,16 @@ import {
   Typography,
 } from "@material-tailwind/react";
 import React, { useEffect, useState } from 'react';
-import { AgregarIngrediente } from "../../components/AgregarIngrediente";
 import axios from '../../api/axios'
 import { useSnackbar } from "notistack";
+import { AgregarReceta } from "../../components/AgregarReceta";
 
 function Recetas() {
   const { enqueueSnackbar } = useSnackbar();
   const [recetas, setRecetas] = useState([]);
   const [ingredientes, setIngredientes] = useState([]);
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentIngredient, setCurrentIngredient] = useState(null);
+  const [currentReceta, setcurrentReceta] = useState(null);
 
 
   function obtener_recetas() {
@@ -22,7 +22,6 @@ function Recetas() {
       .get("/recetas")
       .then((response) => {
         setRecetas(response.data)
-        console.log(recetas)
       });
     axios
       .get("/ingredientes")
@@ -36,7 +35,7 @@ function Recetas() {
   }, [])
 
 
-  const handleAddIngredient = (ingredient) => {
+  const handleAddReceta = (ingredient) => {
 
     axios.post('/recetas/crear', ingredient)
       .then((response) => {
@@ -50,11 +49,18 @@ function Recetas() {
 
   };
 
-  const handleEditIngredient = (updatedIngredient) => {
-    axios.post('/recetas/actualizar', updatedIngredient)
+  const handleEditReceta = (updatedIngredient) => {
+
+      let objeto =     {
+        "id"        : updatedIngredient.id,
+        "nombre"    : updatedIngredient.nombre,
+        "descripcion": updatedIngredient.descripcion,
+        "precio": updatedIngredient.precio,
+        "ingredientes": updatedIngredient.ingredientes
+    }
+    
+    axios.post('/recetas/actualizar', objeto)
       .then((response) => {
-        console.log(response)
-        console.log(response.data)
         if (response.data.message) {
           obtener_recetas();
           enqueueSnackbar(response.data.message, { variant: "success" });
@@ -85,7 +91,7 @@ function Recetas() {
           <div className="p-4">
             <div className="flex justify-end">
               <button
-                onClick={() => { setModalOpen(true); setCurrentIngredient(null); }}
+                onClick={() => { setModalOpen(true); setcurrentReceta(null); }}
                 className="mb-4 bg-blue-500 text-white px-4 py-2 rounded flex justify-end"
               >
                 Agregar Receta
@@ -112,7 +118,7 @@ function Recetas() {
                     <td className="border p-2">{receta.receta.precio - obtenerCostoReceta(receta.ingredientes)}</td>
                     <td className="border p-2">
                       <button
-                        onClick={() => { setModalOpen(true); setCurrentIngredient(receta); }}
+                        onClick={() => { setModalOpen(true); setcurrentReceta(receta); }}
                         className="bg-blue-500 text-white px-2 py-1 rounded"
                       >
                         Editar
@@ -123,11 +129,12 @@ function Recetas() {
               </tbody>
             </table>
 
-            {modalOpen && (
-              <AgregarIngrediente
+            {modalOpen && ingredientes && (
+              <AgregarReceta
                 onClose={() => setModalOpen(false)}
-                onSubmit={currentIngredient ? handleEditIngredient : handleAddIngredient}
-                ingredient={currentIngredient}
+                onSubmit={currentReceta ? handleEditReceta : handleAddReceta}
+                receta={currentReceta}
+                ingrd={ingredientes}
               />
             )}
           </div>
