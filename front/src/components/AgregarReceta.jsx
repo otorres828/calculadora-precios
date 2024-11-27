@@ -15,11 +15,13 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
   const [ingredientesDisponibles, setIngredientesDisponibles] = useState([...ingrd]);
   const [seleccionado, setSeleccionado] = useState(null);
   const [costo, setCosto] = useState(0);
+  const [unidad, setUnidad] = useState(0);
 
   useEffect(() => {
     if (receta) {
       setId(receta.receta.id);
       setNombre(receta.receta.nombre);
+      setUnidad(receta.receta.unidad);
       setDescripcion(receta.receta.descripcion);
       setPrecio(receta.receta.precio);
       setIngredientesSeleccionados(receta.ingredientes);
@@ -33,6 +35,7 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
       setCosto(cs);
     }else{
       setNombre("");
+      setUnidad(0);
       setDescripcion("");
       setPrecio(0);
       setIngredientesSeleccionados([]);
@@ -92,7 +95,9 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
         </h2>
         <div >
 
-          <div className="mb-4">
+        <div className="grid grid-cols-3">
+
+          <div className="mb-4 col-span-2">
             <label className="block text-sm font-medium mb-1"><b>Nombre de la receta</b></label>
             <input
               type="text"
@@ -102,6 +107,19 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
               required
             />
           </div>
+
+          <div className="mb-4 col-span-1 ml-2">
+            <label className="block text-sm font-medium mb-1"><b>Unidad</b></label>
+            <input
+              type="text"
+              value={unidad}
+              onChange={(e) => setUnidad(e.target.value)}
+              className="border border-gray-300 rounded w-full p-2"
+              required
+            />
+          </div>
+
+        </div>
 
           <div className="mb-4">
             <label className="block text-sm font-medium mb-1"><b>Descripcion</b></label>
@@ -194,8 +212,15 @@ export const AgregarReceta = ({ onClose, onSubmit, receta, ingrd }) => {
           </div>
 
           <div className="flex flex-col">
-              <label htmlFor="" className="text-sm font-normal">Costo: <b>{costo.toFixed(2)} EUR </b></label>
-              <label htmlFor="" className="text-sm font-normal">Ganancia: <b>{(precio - costo).toFixed(2)} EUR</b></label>
+              <label htmlFor="" className="text-sm font-normal">Costo General: <b>{costo.toFixed(2)} EUR </b></label>
+              <label htmlFor="" className="text-sm font-normal">Ganancia General: <b>{(precio - costo).toFixed(2)} EUR</b></label>
+              {unidad && unidad>1 &&
+              <>
+                <hr className='my-2'/>
+                <label htmlFor="" className="text-sm font-normal">Costo Unitario: <b>{(costo/unidad).toFixed(2)} EUR </b></label>
+                <label htmlFor="" className="text-sm font-normal">Ganancia Unitaria: <b>{((precio - costo)/unidad).toFixed(2)} EUR</b></label>
+              </>
+              }
             </div>
 
 

@@ -46,7 +46,7 @@ const listar = async (req, res) => {
 
 // Crea una receta
 const crear = async (req, res) => {
-    const { nombre, descripcion, precio, ingredientes } = req.body;
+    const { nombre, descripcion, precio,unidad, ingredientes } = req.body;
 
     // Validación básica
     if (!nombre || !descripcion || !ingredientes || !precio) {
@@ -60,8 +60,8 @@ const crear = async (req, res) => {
         if (isDevelopment) {
 
             const [results] = await db.query(
-                'INSERT INTO recetas (nombre, descripcion, precio) VALUES (?, ?, ?)',
-                [nombre, descripcion, precio]
+                'INSERT INTO recetas (nombre, descripcion, precio,unidad) VALUES (?, ?, ?, ?)',
+                [nombre, descripcion, precio,unidad]
             );
 
             const insertId = results.insertId;
@@ -81,8 +81,8 @@ const crear = async (req, res) => {
 
             // Inserta la receta en la tabla 'recetas'
             result = await db.query(
-                'INSERT INTO recetas (nombre, descripcion, precio) VALUES ($1, $2, $3) RETURNING *',
-                [nombre, descripcion, precio]
+                'INSERT INTO recetas (nombre, descripcion, precio) VALUES ($1, $2, $3,$4) RETURNING *',
+                [nombre, descripcion, precio,unidad]
             );
             const nuevaReceta = result.rows[0];
 
@@ -107,7 +107,7 @@ const crear = async (req, res) => {
 const actualizar = async (req, res) => {
     try {
 
-        const { id, nombre, descripcion, precio, ingredientes } = req.body;
+        const { id, nombre, descripcion, precio, unidad,ingredientes } = req.body;
 
         // Validación básica
         if (!id || !nombre || !descripcion || !ingredientes || !precio) {
@@ -117,8 +117,8 @@ const actualizar = async (req, res) => {
         if (isDevelopment) {
 
             await db.query(
-                'UPDATE recetas SET nombre = ?, descripcion = ?, precio = ? WHERE id = ?',
-                [nombre, descripcion, precio, id]
+                'UPDATE recetas SET nombre = ?, descripcion = ?, precio = ?, unidad = ? WHERE id = ?',
+                [nombre, descripcion, precio,unidad, id]
             );
 
             //obtiene todos los ingredientes
@@ -171,8 +171,8 @@ const actualizar = async (req, res) => {
         } else {
 
             await db.query(
-                'UPDATE recetas SET nombre = $1, descripcion = $2, precio = $3 WHERE id = $4',
-                [nombre, descripcion, precio, id]
+                'UPDATE recetas SET nombre = $1, descripcion = $2, precio = $3 ,unidad = $4 WHERE id = $5',
+                [nombre, descripcion, precio,unidad, id]
             );
 
             // Obtiene todos los ingredientes
