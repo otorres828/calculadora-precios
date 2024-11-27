@@ -11,12 +11,14 @@ dotenv.config({ path: path.resolve(__dirname, '.env') });
 
 // Register routes
 const routerIngredientes = require('./routes/ingredientes.routes.js');
+const routerRecetas = require('./routes/recetas.routes.js');
 
 app.use(cors());
 app.use(express.urlencoded({extended: false}));
 app.use(express.json());
 
 app.use(routerIngredientes);
+app.use(routerRecetas);
 
 // Get server IP address
 app.get('/', (req, res) => {

@@ -1,8 +1,27 @@
 const db = require('../../config/db');
+const isDevelopment = process.env.APP_ENV === 'development';
+
+// Lista todas las recetas
+const listar = async (req, res) => {
+    try {
+
+        if (isDevelopment) {
+            const [rows] = await db.query('SELECT * FROM recetas');
+            return res.json(rows);
+        } else {
+            const result = await db.query('SELECT * FROM recetas');
+            return res.json(result.rows);
+        }
+
+    } catch (error) {
+        console.error('Error al listar recetas:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+};
 
 // Crea una receta
-const crearReceta = async (req, res) => {
-    const { nombre, descripcion, ingredientes, precio } = req.body;
+const crear = async (req, res) => {
+    const { nombre, descripcion, precio, ingredientes } = req.body;
 
     // Validación básica
     if (!nombre || !descripcion || !ingredientes || !precio) {
@@ -10,49 +29,156 @@ const crearReceta = async (req, res) => {
     }
 
     try {
-        // Inserta la receta en la tabla 'recetas'
-        const result = await db.query(
-            'INSERT INTO recetas (nombre, descripcion, precio) VALUES ($1, $2, $3) RETURNING *',
-            [nombre, descripcion, precio]
-        );
-        const nuevaReceta = result.rows[0];
 
-        // Inserta los ingredientes asociados a la receta en una tabla intermedia 'receta_ingrediente'
-        const ingredienteIds = ingredientes.map(ingrediente => ingrediente.id); // Extrae los IDs de los ingredientes
-        const insertIngredientesQuery = `
-            INSERT INTO receta_ingrediente (receta_id, ingrediente_id)
-            VALUES ${ingredienteIds.map(() => '(DEFAULT, $1)').join(', ')}
-            RETURNING *;
-        `;
-        const values = ingredienteIds;
-        await db.query(insertIngredientesQuery, values);
+        let result;
 
-        return res.status(201).json({ message: 'Receta creada exitosamente', receta: nuevaReceta });
+        if (isDevelopment) {
+
+            const [results] = await db.query(
+                'INSERT INTO recetas (nombre, descripcion, precio) VALUES (?, ?, ?)',
+                [nombre, descripcion, precio]
+            );
+
+            const insertId = results.insertId;
+
+            for (let i = 0; i < ingredientes.length; i++) {
+                let item = ingredientes[i];
+                await db.query(
+                    'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES (?, ?, ?)',
+                    [insertId, item.id, item.cantidad]
+                );
+            }
+
+
+            return res.status(200).json({ message: 'Receta creada exitosamente' });
+
+        } else {
+
+            // Inserta la receta en la tabla 'recetas'
+            result = await db.query(
+                'INSERT INTO recetas (nombre, descripcion, precio) VALUES ($1, $2, $3) RETURNING *',
+                [nombre, descripcion, precio]
+            );
+            const nuevaReceta = result.rows[0];
+
+
+            const ingredienteIds = ingredientes.map(ingrediente => ingrediente.id);
+            const cantidades = ingredientes.map(ingrediente => ingrediente.cantidad); // Extrae las cantidades de los ingredientes
+
+            const insertIngredientesQuery = `
+                INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad)
+                VALUES ${ingredienteIds.map((_, index) => `(DEFAULT, $${index + 1}, $${index + 1 + ingredienteIds.length})`).join(', ')}
+                RETURNING *;
+            `;
+
+            const values = [...ingredienteIds, ...cantidades];
+            await db.query(insertIngredientesQuery, values);
+
+            return res.status(201).json({ message: 'Receta creada exitosamente', receta: nuevaReceta });
+        }
+
+
     } catch (error) {
         console.error('Error al crear la receta:', error);
         return res.status(500).send({ error: 'Error al crear la receta' });
     }
 };
 
-// Lista todas las recetas
-const listarRecetas = async (req, res) => {
+// Actualiza una receta
+const actualizar = async (req, res) => {
     try {
-        const result = await db.query('SELECT * FROM recetas');
-        res.json(result.rows);
+
+        const { id, nombre, descripcion, precio, ingredientes } = req.body;
+
+        // Validación básica
+        if (!id || !nombre || !descripcion || !ingredientes || !precio) {
+            return res.status(400).send({ error: 'Faltan campos obligatorios' });
+        }
+
+        if (isDevelopment) {
+
+            await db.query(
+                'UPDATE recetas SET nombre = ?, descripcion = ?, precio = ? WHERE id = ?',
+                [nombre, descripcion, precio, id]
+            );
+
+            //obtiene todos los ingredientes
+            const [ingred] = await db.query(
+                'SELECT * FROM receta_ingrediente WHERE receta_id = ?',
+                [id]
+            );
+
+            for (let i = 0; i < ingredientes.length; i++) {
+                const item = ingredientes[i];
+
+                // Buscamos si el ingrediente ya existe en el array 'ingred'
+                const existingIngred = ingred.find(ing => ing.ingrediente_id === item.id);
+
+                if (!existingIngred) {
+                    // Si no existe, lo creamos
+                    await db.query(
+                        'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES (?, ?, ?)',
+                        [id, item.id, item.cantidad]
+                    );
+                } else {
+                    // Si existe, lo actualizamos (ajusta la consulta UPDATE según tus necesidades)
+                    await db.query(
+                        'UPDATE receta_ingrediente SET cantidad = ? WHERE receta_id = ? AND ingrediente_id = ?',
+                        [item.cantidad, id, item.id]
+                    );
+                }
+            }
+
+            return res.status(200).json({ message: 'Receta actualizada exitosamente' });
+
+
+
+        } else {
+
+            await db.query(
+                'UPDATE recetas SET nombre = $1, descripcion = $2, precio = $3 WHERE id = $4',
+                [nombre, descripcion, precio, id]
+            );
+
+            // Obtiene todos los ingredientes
+            const { rows: ingred } = await db.query(
+                'SELECT * FROM receta_ingrediente WHERE receta_id = $1',
+                [id]
+            );
+
+            for (let i = 0; i < ingredientes.length; i++) {
+                const item = ingredientes[i];
+
+                // Buscamos si el ingrediente ya existe en el array 'ingred'
+                const existingIngred = ingred.find(ing => ing.ingrediente_id === item.id);
+
+                if (!existingIngred) {
+                    // Si no existe, lo creamos
+                    await db.query(
+                        'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES ($1, $2, $3)',
+                        [id, item.id, item.cantidad]
+                    );
+                } else {
+                    // Si existe, lo actualizamos
+                    await db.query(
+                        'UPDATE receta_ingrediente SET cantidad = $1 WHERE receta_id = $2 AND ingrediente_id = $3',
+                        [item.cantidad, id, item.id]
+                    );
+                }
+            }
+
+            return res.status(200).json({ message: 'Receta actualizada exitosamente' });
+        }
+
     } catch (error) {
-        console.error('Error al listar las recetas:', error);
-        return res.status(500).send({ message: 'Error interno del servidor' });
+        console.error('Error al listar recetas:', error);
+        return res.status(500).json({ error: 'Error interno del servidor' });
     }
 };
 
-// Actualiza una receta
-const actualizarReceta = async (req, res) => {
-    // ... Implementación similar a actualizar ingrediente, considerando los ingredientes asociados
-};
-
 // Elimina una receta
-const eliminarReceta = async (req, res) => {
+const eliminar = async (req, res) => {
     // ... Implementación similar a eliminar ingrediente, considerando la eliminación de los registros asociados en la tabla intermedia
 };
 
-module.exports = { crearReceta, listarRecetas, actualizarReceta, eliminarReceta };
+module.exports = { crear, listar, actualizar, eliminar };

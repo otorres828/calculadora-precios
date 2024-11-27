@@ -17,6 +17,7 @@ CREATE TABLE recetas (
     id SERIAL PRIMARY KEY,
     nombre VARCHAR(255) NOT NULL,
     descripcion TEXT
+    precio FLOAT
 );
 
 CREATE TABLE receta_ingrediente (
