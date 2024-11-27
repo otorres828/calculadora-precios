@@ -106,36 +106,37 @@ function Recetas() {
               </button>
 
             </div>
-
-            <table className="min-w-full border">
-              <thead>
-                <tr>
-                  <th className="border p-2">Nombre</th>
-                  <th className="border p-2">Costo de produccion (eur)</th>
-                  <th className="border p-2">Costo de Venta (eur)</th>
-                  <th className="border p-2">Ganancia</th>
-                  <th className="border p-2">Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-                {recetas && recetas.map((receta, index) => (
-                  <tr key={index}>
-                    <td className="border p-2">{receta.receta.nombre}</td>
-                    <td className="border p-2">{obtenerCostoReceta(receta.ingredientes).toFixed(2)}</td>
-                    <td className="border p-2">{receta.receta.precio}</td>
-                    <td className="border p-2">{(receta.receta.precio - obtenerCostoReceta(receta.ingredientes).toFixed(2))}</td>
-                    <td className="border p-2">
-                      <button
-                        onClick={() => { setModalOpen(true); setcurrentReceta(receta); }}
-                        className="bg-blue-500 text-white px-2 py-1 rounded"
-                      >
-                        Editar
-                      </button>
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="min-w-full bg-white divide-y divide-gray-200">
+                <thead>
+                  <tr>
+                    <th className="border p-2">Nombre</th>
+                    <th className="border p-2">Costo de produccion (eur)</th>
+                    <th className="border p-2">Costo de Venta (eur)</th>
+                    <th className="border p-2">Ganancia</th>
+                    <th className="border p-2">Acciones</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {recetas && recetas.map((receta, index) => (
+                    <tr key={index}>
+                      <td className="border p-2">{receta.receta.nombre}</td>
+                      <td className="border p-2">{obtenerCostoReceta(receta.ingredientes).toFixed(2)}</td>
+                      <td className="border p-2">{receta.receta.precio}</td>
+                      <td className="border p-2">{(receta.receta.precio - obtenerCostoReceta(receta.ingredientes).toFixed(2))}</td>
+                      <td className="border p-2">
+                        <button
+                          onClick={() => { setModalOpen(true); setcurrentReceta(receta); }}
+                          className="bg-blue-500 text-white px-2 py-1 rounded"
+                        >
+                          Editar
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
 
             {modalOpen && ingredientes && (
               <AgregarReceta
