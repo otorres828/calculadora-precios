@@ -128,7 +128,7 @@ const actualizar = async (req, res) => {
             );
 
             for (let i = 0; i < ingredientes.length; i++) {
-                const item = ingredientes[i];
+                let item = ingredientes[i];
 
                 // Buscamos si el ingrediente ya existe en el array 'ingred'
                 const existingIngred = ingred.find(ing => ing.ingrediente_id === item.id);
@@ -144,6 +144,22 @@ const actualizar = async (req, res) => {
                     await db.query(
                         'UPDATE receta_ingrediente SET cantidad = ? WHERE receta_id = ? AND ingrediente_id = ?',
                         [item.cant_usada, id, item.id]
+                    );
+                }
+            }
+
+            //si hay elementos en la tabla que no estanen el array se eliminan
+            for (let i = 0; i < ingred.length; i++) {
+                let item = ingred[i];
+
+                const buscar = ingredientes.find(ing => ing.id == item.ingrediente_id);
+
+                if (!buscar) {
+                    console.log(item)
+                    // Si no existe, lo creamos
+                    await db.query(
+                        'DELETE FROM receta_ingrediente WHERE ingrediente_id = ? AND receta_id= ?',
+                        [item.ingrediente_id, id]
                     );
                 }
             }
@@ -182,6 +198,22 @@ const actualizar = async (req, res) => {
                     await db.query(
                         'UPDATE receta_ingrediente SET cantidad = $1 WHERE receta_id = $2 AND ingrediente_id = $3',
                         [item.cant_usada, id, item.id]
+                    );
+                }
+            }
+
+            //si hay elementos en la tabla que no estanen el array se eliminan
+            for (let i = 0; i < ingred.length; i++) {
+                let item = ingred[i];
+
+                const buscar = ingredientes.find(ing => ing.id == item.ingrediente_id);
+
+                if (!buscar) {
+                    console.log(item)
+                    // Si no existe, lo creamos
+                    await db.query(
+                        'DELETE FROM receta_ingrediente WHERE ingrediente_id = $1 AND receta_id= $2',
+                        [item.ingrediente_id, id]
                     );
                 }
             }
