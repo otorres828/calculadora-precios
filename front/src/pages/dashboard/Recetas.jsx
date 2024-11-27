@@ -22,6 +22,7 @@ function Recetas() {
       .get("/recetas")
       .then((response) => {
         setRecetas(response.data)
+        console.log(recetas)
       });
     axios
       .get("/ingredientes")
