@@ -175,13 +175,13 @@ const actualizar = async (req, res) => {
                     // Si no existe, lo creamos
                     await db.query(
                         'INSERT INTO receta_ingrediente (receta_id, ingrediente_id, cantidad) VALUES ($1, $2, $3)',
-                        [id, item.id, item.cantidad]
+                        [id, item.id, item.cant_usada]
                     );
                 } else {
                     // Si existe, lo actualizamos
                     await db.query(
                         'UPDATE receta_ingrediente SET cantidad = $1 WHERE receta_id = $2 AND ingrediente_id = $3',
-                        [item.cantidad, id, item.id]
+                        [item.cant_usada, id, item.id]
                     );
                 }
             }
