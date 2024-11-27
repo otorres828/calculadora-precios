@@ -77,7 +77,7 @@ function Recetas() {
       <Card>
         <CardHeader variant="gradient" color="blue" className="mb-8 p-6">
           <Typography variant="h6" color="white">
-            Recetas
+            Listado de Recetas
           </Typography>
         </CardHeader>
         <CardBody className="px-0 pt-0 pb-2">
