@@ -99,6 +99,7 @@ function Recetas() {
                   <th className="border p-2">Nombre</th>
                   <th className="border p-2">Costo de produccion (eur)</th>
                   <th className="border p-2">Costo de Venta (eur)</th>
+                  <th className="border p-2">Ganancia</th>
                   <th className="border p-2">Acciones</th>
                 </tr>
               </thead>
@@ -108,6 +109,7 @@ function Recetas() {
                     <td className="border p-2">{receta.receta.nombre}</td>
                     <td className="border p-2">{obtenerCostoReceta(receta.ingredientes)}</td>
                     <td className="border p-2">{receta.receta.precio}</td>
+                    <td className="border p-2">{receta.receta.precio - obtenerCostoReceta(receta.ingredientes)}</td>
                     <td className="border p-2">
                       <button
                         onClick={() => { setModalOpen(true); setCurrentIngredient(receta); }}
