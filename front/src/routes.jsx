@@ -2,8 +2,8 @@ import {
   HomeIcon,
   TableCellsIcon,
 } from "@heroicons/react/24/solid";
-import Usuarios from "./pages/dashboard/usuarios";
 import Ingredientes from "./pages/dashboard/Ingredientes";
+import Recetas from "./pages/dashboard/Recetas";
 
 
 const token = localStorage.getItem("token");
@@ -19,12 +19,12 @@ const routes = [
         icon: <HomeIcon {...icon} />,
         name: "Recetas",
         path: "",
-        element: <Usuarios token={token}/>,
+        element: <Recetas token={token}/>,
       },
       
       {
         icon: <TableCellsIcon {...icon} />,
-        name: "Usuarios",
+        name: "Ingredientes",
         path: "/ingredientes",
         element: <Ingredientes token={token}/>,
       },
