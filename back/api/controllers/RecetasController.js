@@ -11,7 +11,7 @@ const listar = async (req, res) => {
             let news = [];
             for (let i = 0; i < rows.length; i++) {
                 let receta = rows[i];
-                const [ingredientes] = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= ? and r.ingrediente_id=i.id',[receta.id]);
+                const [ingredientes] = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= ? and r.ingrediente_id=i.id order by i.id asc',[receta.id]);
 
                 let ojb={
                     "receta":receta,
@@ -27,7 +27,7 @@ const listar = async (req, res) => {
             let news = [];
             for (let i = 0; i < recetas.length; i++) {
                 let receta = recetas[i];
-                const ingredientes = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= $1 and r.ingrediente_id=i.id',[receta.id]);
+                const ingredientes = await db.query('SELECT i.*,r.cantidad AS cant_usada FROM ingredientes i,receta_ingrediente r where r.receta_id= $1 and r.ingrediente_id=i.id order by i.id asc',[receta.id]);
 
                 let ojb={
                     "receta":receta,
