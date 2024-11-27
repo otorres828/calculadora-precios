@@ -78,8 +78,9 @@ function Ingredientes() {
             <table className="min-w-full border">
               <thead>
                 <tr>
-                  <th className="border p-2">Nombre</th>
-                  <th className="border p-2">Precio por unidad (eur)</th>
+                <th className="border p-2">Nombre</th>
+                <th className="border p-2">Cantidad (gr)</th>
+                <th className="border p-2">Precio por unidad (eur)</th>
                   <th className="border p-2">Acciones</th>
                 </tr>
               </thead>
