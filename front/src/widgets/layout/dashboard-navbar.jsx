@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import { useLocation, Link, NavLink } from "react-router-dom";
 import {
   Navbar,
@@ -11,12 +10,10 @@ import {
   MenuItem,
 } from "@material-tailwind/react";
 import {
-  Cog6ToothIcon,
   Bars3Icon,
 } from "@heroicons/react/24/solid";
 import {
   useMaterialTailwindController,
-  setOpenConfigurator,
 } from "../../context";
 import { Tooltip } from "@mui/material";
 import { useSnackbar } from "notistack";

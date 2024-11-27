@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import ProductForm from './ProductForm';
 
 const initialProducts = [
   { id: 1, name: 'Producto 1', description: 'Descripción del producto 1', quantity: '100g', price: '10.99' },
