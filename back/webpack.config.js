@@ -9,16 +9,5 @@ module.exports = {
     filename: 'index.js'
   },
   target: 'node',
-  externals: [nodeExternals()],
-  
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'api/json/*.json',
-          to: 'json/[name][ext]'
-        }
-      ]
-    })
-  ]
+  externals: [nodeExternals()]
 };
